@@ -35,7 +35,29 @@ Router.post("/signup", async(req, res) => {
 
 /*
 Route /Signup
-Des    Signup with exmail and password
+Des    Signin with exmail and password
+params  none
+Access  piblic
+Method POST
+*/ 
+
+Router.post("/signin", async(req, res) => {
+    try{       
+        const user = await UserModel.findByEmailAndPassword(req.body.credentials);
+
+        //generate JWT auth token
+        const token = user.generateJwtToken();
+
+        //return
+        return res.status(200).json({token, status: "success"});
+       }catch (error) {
+        return res.status(500).json({ error: error.message});
+       }
+});
+
+/*
+Route /google
+Des    google signin
 params  none
 Access  piblic
 Method POST
@@ -43,6 +65,7 @@ Method POST
 
 
 export default Router;
+
 
 //Static and Method in mongoose
 
